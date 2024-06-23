@@ -8,10 +8,8 @@ import os
 from tqdm import tqdm
 
 
-HUGGINGFACE_TOKEN = os.getenv("HF_TOKEN")
 MODEL = "meta-llama/Llama-2-7b-chat-hf"
 
-token = os.getenv("HF_TOKEN")
 llama_name = "meta-llama/Llama-2-7b-chat-hf"
 
 COMPARISON_PROMPT_TEMPLATE = """<s>[INST] <<SYS>>
