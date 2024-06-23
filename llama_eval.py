@@ -211,8 +211,8 @@ def compute_summary_comparisons(model, tokenizer, dataset, file):
         print(f"Summaries for {file} on {dataset} already exists. Skipping...")
         return
 
-    base_data = load_from_json(f"summaries/{dataset}_train_llama_responses.json")
-    new_data = load_from_json(f"summaries/{dataset}/{file}_summaries.json")
+    base_data = load_from_json(f"summaries/{dataset}/new/llama2_responses.json")
+    new_data = load_from_json(f"summaries/{dataset}/{file}_responses.json")
     articles = load_from_json(f"articles/{dataset}_train_articles.json")
 
     output = {}
@@ -224,7 +224,7 @@ def compute_summary_comparisons(model, tokenizer, dataset, file):
             COMPARISON_PROMPT_TEMPLATE.format(
                 article=articles[key], summary1=new_data[key], summary2=base_data[key]
             ),
-            ["1", "2"],
+            ["1", "2"]
         )
         result["backward"] = generate_logprobs(
             model,
@@ -232,7 +232,7 @@ def compute_summary_comparisons(model, tokenizer, dataset, file):
             COMPARISON_PROMPT_TEMPLATE.format(
                 article=articles[key], summary1=base_data[key], summary2=new_data[key]
             ),
-            ["1", "2"],
+            ["1", "2"]
         )
 
         output[key] = result
