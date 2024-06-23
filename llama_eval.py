@@ -4,11 +4,9 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch.nn.functional as F
 import torch as t
 import argparse
-from dotenv import load_dotenv
 import os
 from tqdm import tqdm
 
-load_dotenv()
 
 HUGGINGFACE_TOKEN = os.getenv("HF_TOKEN")
 MODEL = "meta-llama/Llama-2-7b-chat-hf"
