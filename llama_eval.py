@@ -68,12 +68,12 @@ def generate_logprobs(model, tokenizer, input_text, tokens):
     return res
 
 
-def load_finetuned_model(file_name):
-    model = AutoModelForCausalLM.from_pretrained(
-        llama_name, token=token, load_in_8bit=True, device_map="auto"
-    )
-    model.load_state_dict(t.load(file_name))
-    return model
+# def load_finetuned_model(file_name):
+#     model = AutoModelForCausalLM.from_pretrained(
+#         llama_name, token=token, load_in_8bit=True, device_map="auto"
+#     )
+#     model.load_state_dict(t.load(file_name))
+#     return model
 
 
 def compute_choice_results(model, tokenizer, dataset, file):
@@ -212,7 +212,7 @@ def compute_summary_comparisons(model, tokenizer, dataset, file):
     articles = load_from_json(f"articles/{dataset}_train_articles.json")
 
     output = {}
-    for key in new_data:
+    for key in tqdm(new_data):
         result = {"key": key}
         result["forward"] = generate_logprobs(
             model,
@@ -254,7 +254,7 @@ def process_comparisons(dataset, file):
 if __name__ == "__main__":
     device = torch.device("cuda")
 
-    tokenizer = AutoTokenizer.from_pretrained(llama_name, token=token)
+    # tokenizer = AutoTokenizer.from_pretrained(llama_name, token=token)
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--file",
@@ -272,9 +272,9 @@ if __name__ == "__main__":
     # model = load_finetuned_model(model_weights)
     # print(f"Loaded {model_weights}!")
 
-    model = AutoModelForCausalLM.from_pretrained(
-        llama_name, token=token, load_in_8bit=True, device_map="auto"
-    )
+    # model = AutoModelForCausalLM.from_pretrained(
+    #     llama_name, token=token, load_in_8bit=True, device_map="auto"
+    # )
 
     # compute_choice_results(model, tokenizer, "xsum", args.file)
     # compute_choice_results(model, tokenizer, "cnn", args.file)
