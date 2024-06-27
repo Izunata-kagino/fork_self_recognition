@@ -213,7 +213,7 @@ def compute_summary_comparisons(model, tokenizer, dataset, file):
     articles = load_from_json(f"articles/{dataset}_train_articles.json")
 
     output = {}
-    for key in tqdm(new_data):
+    for key in tqdm(new_data,leave=False):
         result = {"key": key}
         result["forward"] = generate_logprobs(
             model,
