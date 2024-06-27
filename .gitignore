@@ -2,3 +2,4 @@ myvenv/
 .env
 .vscode/
 __pycache__/
+folder/
