@@ -235,6 +235,38 @@ def compute_summary_comparisons(model, tokenizer, dataset, file):
         output[key] = result
 
     save_to_json(output, save_file)
+    
+def compute_llama3_summary_comparisons(model, tokenizer, dataset):
+    save_file = f"new/comparisons/{dataset}/llama3_2_comparisons.json"
+    make_folder_path(save_file)
+
+    base_data = load_from_json(f"summaries/{dataset}/new/llama3_responses.json")
+    new_data = load_from_json(f"summaries/{dataset}/new/llama2_responses.json")
+    articles = load_from_json(f"articles/{dataset}_train_articles.json")
+
+    output = {}
+    for key in tqdm(new_data,leave=False):
+        result = {"key": key}
+        result["forward"] = generate_logprobs(
+            model,
+            tokenizer,
+            COMPARISON_PROMPT_TEMPLATE.format(
+                article=articles[key], summary1=new_data[key], summary2=base_data[key]
+            ),
+            ["1", "2"]
+        )
+        result["backward"] = generate_logprobs(
+            model,
+            tokenizer,
+            COMPARISON_PROMPT_TEMPLATE.format(
+                article=articles[key], summary1=base_data[key], summary2=new_data[key]
+            ),
+            ["1", "2"]
+        )
+
+        output[key] = result
+
+    save_to_json(output, save_file)
 
 
 def process_comparisons(dataset, file):
