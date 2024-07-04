@@ -382,18 +382,18 @@ class detection:
 
 
 if __name__ == "__main__":
-    # device = torch.device("cuda")
+    device = torch.device("cuda")
 
-    # # tokenizer = AutoTokenizer.from_pretrained(llama_name, token=token)
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument(
-    #     "--file",
-    #     type=str,
-    #     required=True,
-    # )
-    # args = parser.parse_args()
+    # tokenizer = AutoTokenizer.from_pretrained(llama_name, token=token)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--file",
+        type=str,
+        required=True,
+    )
+    args = parser.parse_args()
 
-    # model_weights = f"finetuned_models/{args.file}.pt"
+    model_weights = f"finetuned_models/{args.file}.pt"
 
     # if not os.path.exists(model_weights):
     #     print(f"Model {model_weights} does not yet exist!")
@@ -420,8 +420,3 @@ if __name__ == "__main__":
     # process_comparisons("cnn", args.file)
     
     
-    print(LLAMA_3_TEMPLATE.format(system_prompt = DETECTION_SYSTEM_PROMPT,
-                                        prompt = DETECTION_PROMPT_TEMPLATE.format(
-                                                article='articles[key]', summary1='new_data[key]', summary2='base_data[key]'
-                                            )
-                                        ) + ' My answer is (')
