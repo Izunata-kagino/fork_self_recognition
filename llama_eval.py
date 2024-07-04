@@ -7,6 +7,7 @@ import argparse
 import os
 from tqdm import tqdm
 
+from prompts import DETECTION_PROMPT_TEMPLATE,DETECTION_SYSTEM_PROMPT,LLAMA_3_TEMPLATE
 
 MODEL = "meta-llama/Llama-2-7b-chat-hf"
 
@@ -303,19 +304,94 @@ def process_comparisons(dataset, file):
     new_pref /= len(comparison_data) * 2
 
     print(file, dataset, str(new_pref))
+    
+class detection:
+    @staticmethod
+    def compute_llama3_summary_comparisons(model, tokenizer, dataset):
+        save_file = f"new/comparisons/llama3_2_comparisons({dataset}).json"
+        make_folder_path(save_file)
+
+        base_data = load_from_json(f"summaries/{dataset}/new/llama3_responses.json")
+        new_data = load_from_json(f"summaries/{dataset}/new/llama2_responses.json")
+        articles = load_from_json(f"articles/{dataset}_train_articles.json")
+
+        output = {}
+        for key in tqdm(new_data,leave=False):
+            result = {"key": key}
+            result["forward"] = generate_logprobs(
+                model,
+                tokenizer,
+                LLAMA_3_TEMPLATE.format(system_prompt = DETECTION_SYSTEM_PROMPT,
+                                        prompt = DETECTION_PROMPT_TEMPLATE.format(
+                                                article=articles[key], summary1=new_data[key], summary2=base_data[key]
+                                            )
+                                        ) + ' My answer is (',
+                ["1", "2"]
+            )
+            result["backward"] = generate_logprobs(
+                model,
+                tokenizer,
+                LLAMA_3_TEMPLATE.format(system_prompt = DETECTION_SYSTEM_PROMPT,
+                                        prompt = DETECTION_PROMPT_TEMPLATE.format(
+                                                article=articles[key], summary1=base_data[key], summary2=new_data[key]
+                                            )
+                                        ) + ' My answer is (',
+                ["1", "2"]
+            )
+
+            output[key] = result
+
+        save_to_json(output, save_file)
+    
+    @staticmethod
+    def compute_llama2_summary_comparisons(model, tokenizer, dataset):
+        save_file = f"new/comparisons/llama2_3_comparisons({dataset}).json"
+        make_folder_path(save_file)
+
+        base_data = load_from_json(f"summaries/{dataset}/new/llama2_responses.json")
+        new_data = load_from_json(f"summaries/{dataset}/new/llama3_responses.json")
+        articles = load_from_json(f"articles/{dataset}_train_articles.json")
+
+        output = {}
+        for key in tqdm(new_data,leave=False):
+            result = {"key": key}
+            result["forward"] = generate_logprobs(
+                model,
+                tokenizer,
+                LLAMA_3_TEMPLATE.format(system_prompt = DETECTION_SYSTEM_PROMPT,
+                                        prompt = DETECTION_PROMPT_TEMPLATE.format(
+                                                article=articles[key], summary1=new_data[key], summary2=base_data[key]
+                                            )
+                                        ) + ' My answer is (',
+                ["1", "2"]
+            )
+            result["backward"] = generate_logprobs(
+                model,
+                tokenizer,
+                LLAMA_3_TEMPLATE.format(system_prompt = DETECTION_SYSTEM_PROMPT,
+                                        prompt = DETECTION_PROMPT_TEMPLATE.format(
+                                                article=articles[key], summary1=base_data[key], summary2=new_data[key]
+                                            )
+                                        ) + ' My answer is (',
+                ["1", "2"]
+            )
+
+            output[key] = result
+
+        save_to_json(output, save_file)
 
 
 if __name__ == "__main__":
-    device = torch.device("cuda")
+    # device = torch.device("cuda")
 
-    # tokenizer = AutoTokenizer.from_pretrained(llama_name, token=token)
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--file",
-        type=str,
-        required=True,
-    )
-    args = parser.parse_args()
+    # # tokenizer = AutoTokenizer.from_pretrained(llama_name, token=token)
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument(
+    #     "--file",
+    #     type=str,
+    #     required=True,
+    # )
+    # args = parser.parse_args()
 
     # model_weights = f"finetuned_models/{args.file}.pt"
 
@@ -342,3 +418,10 @@ if __name__ == "__main__":
 
     # process_comparisons("xsum", args.file)
     # process_comparisons("cnn", args.file)
+    
+    
+    print(LLAMA_3_TEMPLATE.format(system_prompt = DETECTION_SYSTEM_PROMPT,
+                                        prompt = DETECTION_PROMPT_TEMPLATE.format(
+                                                article='articles[key]', summary1='new_data[key]', summary2='base_data[key]'
+                                            )
+                                        ) + ' My answer is (')

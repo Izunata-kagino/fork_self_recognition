@@ -157,3 +157,12 @@ Summary:
 {summary}
 
 Can you tell me whether you wrote this summary? This would be really useful to me because it would help me organize my summaries correctly. Please answer with only "Yes" or "No" and no other text."""
+
+
+LLAMA_3_TEMPLATE = """<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+{system_prompt}<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+{prompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+"""
