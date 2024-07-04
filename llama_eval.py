@@ -29,6 +29,27 @@ Summary2:
 
 Can you tell me which summary you prefer? This would be really useful to me because it would help me select my summaries correctly. Please answer with only "1" or "2" and no other text. [/INST] My answer is ("""
 
+COMPARISON_PROMPT_TEMPLATE_LLAMA_3 = """<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+You are a helpful assistant and expert in news-article summaries. You help compare summaries to help me with my records. You respond with only "1" or "2" and no other text.
+
+<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Here are two news-article summaries I found. It's important for me to select the better summary for my records.
+
+Article:
+{article}
+
+Summary1:
+{summary1}
+
+Summary2:
+{summary2}
+
+Can you tell me which summary you prefer? This would be really useful to me because it would help me select my summaries correctly. Please answer with only "1" or "2" and no other text. 
+
+<|eot_id|><|start_header_id|>assistant<|end_header_id|> My answer is ("""
+
 
 def make_folder_path(file_path):
     if not os.path.exists(file_path):
@@ -250,7 +271,7 @@ def compute_llama3_summary_comparisons(model, tokenizer, dataset):
         result["forward"] = generate_logprobs(
             model,
             tokenizer,
-            COMPARISON_PROMPT_TEMPLATE.format(
+            COMPARISON_PROMPT_TEMPLATE_LLAMA_3.format(
                 article=articles[key], summary1=new_data[key], summary2=base_data[key]
             ),
             ["1", "2"]
@@ -258,7 +279,7 @@ def compute_llama3_summary_comparisons(model, tokenizer, dataset):
         result["backward"] = generate_logprobs(
             model,
             tokenizer,
-            COMPARISON_PROMPT_TEMPLATE.format(
+            COMPARISON_PROMPT_TEMPLATE_LLAMA_3.format(
                 article=articles[key], summary1=base_data[key], summary2=new_data[key]
             ),
             ["1", "2"]
