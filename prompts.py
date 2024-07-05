@@ -166,3 +166,10 @@ LLAMA_3_TEMPLATE = """<|begin_of_text|><|start_header_id|>system<|end_header_id|
 {prompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
 
 """
+
+LLAMA_2_TEMPLATE = """<s>[INST] <<SYS>>
+{system_prompt}
+<</SYS>>
+
+{prompt} [/INST]
+"""

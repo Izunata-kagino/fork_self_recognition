@@ -7,7 +7,7 @@ import argparse
 import os
 from tqdm import tqdm
 
-from prompts import DETECTION_PROMPT_TEMPLATE,DETECTION_SYSTEM_PROMPT,LLAMA_3_TEMPLATE
+from prompts import DETECTION_PROMPT_TEMPLATE,DETECTION_SYSTEM_PROMPT,LLAMA_3_TEMPLATE,LLAMA_2_TEMPLATE
 
 MODEL = "meta-llama/Llama-2-7b-chat-hf"
 
@@ -358,7 +358,7 @@ class detection:
             result["forward"] = generate_logprobs(
                 model,
                 tokenizer,
-                LLAMA_3_TEMPLATE.format(system_prompt = DETECTION_SYSTEM_PROMPT,
+                LLAMA_2_TEMPLATE.format(system_prompt = DETECTION_SYSTEM_PROMPT,
                                         prompt = DETECTION_PROMPT_TEMPLATE.format(
                                                 article=articles[key], summary1=new_data[key], summary2=base_data[key]
                                             )
