@@ -308,7 +308,7 @@ def process_comparisons(dataset, file):
 class detection:
     @staticmethod
     def compute_llama3_summary_comparisons(model, tokenizer, dataset):
-        save_file = f"new/comparisons/llama3_2_comparisons({dataset}).json"
+        save_file = f"new/comparisons/[recognition]llama3_2_comparisons({dataset}).json"
         make_folder_path(save_file)
 
         base_data = load_from_json(f"summaries/{dataset}/new/llama3_responses.json")
@@ -345,7 +345,7 @@ class detection:
     
     @staticmethod
     def compute_llama2_summary_comparisons(model, tokenizer, dataset):
-        save_file = f"new/comparisons/llama2_3_comparisons({dataset}).json"
+        save_file = f"new/comparisons/[recognition]llama2_3_comparisons({dataset}).json"
         make_folder_path(save_file)
 
         base_data = load_from_json(f"summaries/{dataset}/new/llama2_responses.json")
@@ -368,7 +368,7 @@ class detection:
             result["backward"] = generate_logprobs(
                 model,
                 tokenizer,
-                LLAMA_3_TEMPLATE.format(system_prompt = DETECTION_SYSTEM_PROMPT,
+                LLAMA_2_TEMPLATE.format(system_prompt = DETECTION_SYSTEM_PROMPT,
                                         prompt = DETECTION_PROMPT_TEMPLATE.format(
                                                 article=articles[key], summary1=base_data[key], summary2=new_data[key]
                                             )
