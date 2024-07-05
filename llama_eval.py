@@ -53,7 +53,7 @@ Can you tell me which summary you prefer? This would be really useful to me beca
 
 
 def make_folder_path(file_path):
-    if not os.path.exists(file_path):
+    if not os.path.exists(os.path.dirname(file_path)):
         os.makedirs(os.path.dirname(file_path))
 
 def save_to_json(dictionary, file_name):
